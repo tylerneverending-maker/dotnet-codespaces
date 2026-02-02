@@ -1,0 +1,98 @@
+name: Publish Release Artifacts
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-backend:
+    name: Publish Backend Artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore SampleApp/BackEnd/BackEnd.csproj
+
+      - name: Publish Backend
+        run: dotnet publish SampleApp/BackEnd/BackEnd.csproj --configuration Release --output ./backend-publish --self-contained false
+
+      - name: Upload Backend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-release
+          path: ./backend-publish
+          retention-days: 30
+
+  publish-frontend:
+    name: Publish Frontend Artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore SampleApp/FrontEnd/FrontEnd.csproj
+
+      - name: Publish Frontend
+        run: dotnet publish SampleApp/FrontEnd/FrontEnd.csproj --configuration Release --output ./frontend-publish --self-contained false
+
+      - name: Upload Frontend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-release
+          path: ./frontend-publish
+          retention-days: 30
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [publish-backend, publish-frontend]
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Backend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-release
+          path: ./backend-release
+
+      - name: Download Frontend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-release
+          path: ./frontend-release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./backend-release/**
+            ./frontend-release/**
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
