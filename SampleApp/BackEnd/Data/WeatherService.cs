@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace BackEnd.Data;
 
 public interface IWeatherService

@@ -20,15 +20,6 @@ public class WeatherDbContext : DbContext
             entity.Property(e => e.TemperatureC).IsRequired();
             entity.Property(e => e.Summary).HasMaxLength(50);
         });
-
-        // Seed initial data
-        modelBuilder.Entity<WeatherForecast>().HasData(
-            new WeatherForecast { Id = 1, Date = DateOnly.FromDateTime(DateTime.Now.AddDays(1)), TemperatureC = 20, Summary = "Mild" },
-            new WeatherForecast { Id = 2, Date = DateOnly.FromDateTime(DateTime.Now.AddDays(2)), TemperatureC = 25, Summary = "Warm" },
-            new WeatherForecast { Id = 3, Date = DateOnly.FromDateTime(DateTime.Now.AddDays(3)), TemperatureC = 15, Summary = "Cool" },
-            new WeatherForecast { Id = 4, Date = DateOnly.FromDateTime(DateTime.Now.AddDays(4)), TemperatureC = 10, Summary = "Chilly" },
-            new WeatherForecast { Id = 5, Date = DateOnly.FromDateTime(DateTime.Now.AddDays(5)), TemperatureC = 30, Summary = "Hot" }
-        );
     }
 }
 
