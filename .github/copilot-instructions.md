@@ -58,11 +58,21 @@ Automated CI/CD pipelines run on every push and pull request:
 ## Minimal API Design (Backend)
 
 The backend uses ASP.NET Core Minimal APIs exclusively - no controllers. Key patterns:
-- **Route definition**: Use `app.MapGet()` directly in Program.cs to define endpoints
-- **Inline handlers**: Business logic can be inline lambdas for simple operations (see `/weatherforecast` endpoint)
-- **Naming requirement**: All endpoints must use `.WithName()` for OpenAPI documentation - this is critical for Scalar UI integration
-- **Data models**: Use C# records for API response DTOs to enforce immutability (e.g., `WeatherForecast` record includes computed `TemperatureF` property)
-- **Scaling pattern**: For complex operations, extract handlers to separate methods/classes, but keep configuration fluent in Program.cs
+- **Route definition**: Use `app.MapGet()` directly in Program.cs to define endpoints with dependency injection
+- **Service layer**: Inject services like `IWeatherService` for data access (see [WeatherService.cs](SampleApp/BackEnd/Data/WeatherService.cs))
+- **Naming requirement**: All endpoints must use `.WithName()` for OpenAPI documentation - critical for Scalar UI integration
+- **Data models**: Use C# records for API response DTOs to enforce immutability (e.g., `WeatherForecast` record with computed `TemperatureF` property)
+- **Scaling pattern**: Extract handlers to separate methods/classes, keep configuration fluent in Program.cs
+
+## Database Integration (Entity Framework Core)
+
+Backend uses SQL Server with Entity Framework Core:
+- **DbContext**: [WeatherDbContext.cs](SampleApp/BackEnd/Data/WeatherDbContext.cs) - entity configuration, seeding, and migrations
+- **Service layer**: [WeatherService.cs](SampleApp/BackEnd/Data/WeatherService.cs) - `IWeatherService` interface for data access from API handlers
+- **Connection string**: Configured in `appsettings.json` - defaults to `Server=db` for Docker, or local server for Codespaces
+- **Migrations**: Auto-applied on startup via `dbContext.Database.Migrate()` in Program.cs
+- **Seeding**: Initial data seeded in `OnModelCreating()` - customize by modifying `WeatherDbContext.HasData()`
+- **Development setup**: For local development without Docker, update connection string to point to local SQL Server or use SQLite
 
 ## Error Handling
 
@@ -144,8 +154,36 @@ The frontend is built with Blazor Server (server-side rendering with WebSocket r
 - Development environment may use HTTP for faster iteration
 - Certificate handling: Handled automatically by .NET dev certificates for local development
 
+## Docker & Containerization
+
+**Dockerfiles:**
+- [SampleApp/BackEnd/Dockerfile](SampleApp/BackEnd/Dockerfile) - Multi-stage build for backend (SDK → Publish → Runtime)
+- [SampleApp/FrontEnd/Dockerfile](SampleApp/FrontEnd/Dockerfile) - Multi-stage build for frontend with `WEATHER_URL=http://backend:8081`
+
+**Docker Compose:**
+- [docker-compose.yml](docker-compose.yml) - Orchestrates backend, frontend, and SQL Server containers
+- **Services**: `db` (SQL Server 2022), `backend` (port 8081), `frontend` (port 8080)
+- **Database**: SQL Server with health checks and persistent volume `sqlserver_data`
+- **Development**: Includes volume mounts for hot reload during development
+- **Start**: `docker-compose up -d` to run all services
+
+**Usage:**
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
 ## Key Files Reference
 - [SampleApp.sln](SampleApp/SampleApp.sln) - solution file
-- [BackEnd/Program.cs](SampleApp/BackEnd/Program.cs) - API endpoint definitions
+- [BackEnd/Program.cs](SampleApp/BackEnd/Program.cs) - API configuration and routes
+- [BackEnd/Data/WeatherService.cs](SampleApp/BackEnd/Data/WeatherService.cs) - data access service
+- [BackEnd/Data/WeatherDbContext.cs](SampleApp/BackEnd/Data/WeatherDbContext.cs) - Entity Framework Core context
 - [FrontEnd/Program.cs](SampleApp/FrontEnd/Program.cs) - Blazor configuration
 - [FrontEnd/Data/WeatherForecastClient.cs](SampleApp/FrontEnd/Data/WeatherForecastClient.cs) - HTTP integration
+- [docker-compose.yml](docker-compose.yml) - Container orchestration
