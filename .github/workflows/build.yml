@@ -26,13 +26,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore SampleApp/BackEnd/BackEnd.csproj
+        run: dotnet restore OceanSuprise/BackEnd/BackEnd.csproj
 
       - name: Build project
-        run: dotnet build SampleApp/BackEnd/BackEnd.csproj --no-restore --configuration Release
+        run: dotnet build OceanSuprise/BackEnd/BackEnd.csproj --no-restore --configuration Release
 
       - name: Publish project
-        run: dotnet publish SampleApp/BackEnd/BackEnd.csproj --no-restore --configuration Release --output ./backend-publish
+        run: dotnet publish OceanSuprise/BackEnd/BackEnd.csproj --no-restore --configuration Release --output ./backend-publish
 
   build-frontend:
     name: Build Frontend
@@ -48,10 +48,10 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore SampleApp/FrontEnd/FrontEnd.csproj
+        run: dotnet restore OceanSuprise/FrontEnd/FrontEnd.csproj
 
       - name: Build project
-        run: dotnet build SampleApp/FrontEnd/FrontEnd.csproj --no-restore --configuration Release
+        run: dotnet build OceanSuprise/FrontEnd/FrontEnd.csproj --no-restore --configuration Release
 
       - name: Publish project
-        run: dotnet publish SampleApp/FrontEnd/FrontEnd.csproj --no-restore --configuration Release --output ./frontend-publish
+        run: dotnet publish OceanSuprise/FrontEnd/FrontEnd.csproj --no-restore --configuration Release --output ./frontend-publish

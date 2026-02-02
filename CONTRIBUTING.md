@@ -29,14 +29,14 @@ Welcome! This guide will help you get started with development and contribute to
 
 2. **Option A: Local Development (without Docker)**
    - Ensure SQL Server is running locally
-   - Update connection string in `SampleApp/BackEnd/appsettings.json` if needed
+   - Update connection string in `OceanSuprise/BackEnd/appsettings.json` if needed
    - Run both projects using VS Code "Run All" command or:
      ```bash
      # Terminal 1: Backend
-     dotnet watch run --project SampleApp/BackEnd/BackEnd.csproj
+     dotnet watch run --project OceanSuprise/BackEnd/BackEnd.csproj
      
      # Terminal 2: Frontend
-     dotnet watch run --project SampleApp/FrontEnd/FrontEnd.csproj
+     dotnet watch run --project OceanSuprise/FrontEnd/FrontEnd.csproj
      ```
 
 3. **Option B: Docker Development**
@@ -74,7 +74,7 @@ Use descriptive names:
 ### 3. Hot Reload Development
 The projects are configured for hot reload:
 ```bash
-dotnet watch run --project SampleApp/BackEnd/BackEnd.csproj
+dotnet watch run --project OceanSuprise/BackEnd/BackEnd.csproj
 ```
 - Changes save automatically when you modify files
 - Browser will refresh (or you can refresh manually)
@@ -82,7 +82,7 @@ dotnet watch run --project SampleApp/BackEnd/BackEnd.csproj
 ### 4. Test Your Changes Locally
 ```bash
 # Build solution
-dotnet build SampleApp/SampleApp.sln
+dotnet build OceanSuprise/OceanSuprise.sln
 
 # Run tests
 dotnet test
@@ -92,7 +92,7 @@ dotnet test
 
 ### Backend Tests
 ```bash
-dotnet test SampleApp/BackEnd.Tests/BackEnd.Tests.csproj
+dotnet test OceanSuprise/BackEnd.Tests/BackEnd.Tests.csproj
 ```
 
 Tests cover:
@@ -102,7 +102,7 @@ Tests cover:
 
 ### Frontend Tests
 ```bash
-dotnet test SampleApp/FrontEnd.Tests/FrontEnd.Tests.csproj
+dotnet test OceanSuprise/FrontEnd.Tests/FrontEnd.Tests.csproj
 ```
 
 Tests cover:
@@ -185,10 +185,10 @@ git rebase origin/main
 ### 2. Before Opening a PR
 ```bash
 # Format code
-dotnet format SampleApp/SampleApp.sln
+dotnet format OceanSuprise/OceanSuprise.sln
 
 # Build and test
-dotnet build SampleApp/SampleApp.sln
+dotnet build OceanSuprise/OceanSuprise.sln
 dotnet test
 ```
 
@@ -279,7 +279,7 @@ git push origin feature/your-feature-name
 1. **Update entity** in `BackEnd/Data/WeatherDbContext.cs`
 2. **Create migration**:
    ```bash
-   dotnet ef migrations add AddMyColumn --project SampleApp/BackEnd
+   dotnet ef migrations add AddMyColumn --project OceanSuprise/BackEnd
    ```
 3. **Migration auto-applies** on startup via `dbContext.Database.Migrate()`
 
@@ -287,22 +287,22 @@ git push origin feature/your-feature-name
 
 ```bash
 # Build
-dotnet build SampleApp/SampleApp.sln
+dotnet build OceanSuprise/OceanSuprise.sln
 
 # Run backend with watch
-dotnet watch run --project SampleApp/BackEnd/BackEnd.csproj
+dotnet watch run --project OceanSuprise/BackEnd/BackEnd.csproj
 
 # Run frontend with watch
-dotnet watch run --project SampleApp/FrontEnd/FrontEnd.csproj
+dotnet watch run --project OceanSuprise/FrontEnd/FrontEnd.csproj
 
 # Run all tests
 dotnet test
 
 # Format code
-dotnet format SampleApp/SampleApp.sln
+dotnet format OceanSuprise/OceanSuprise.sln
 
 # Create migration
-dotnet ef migrations add MigrationName --project SampleApp/BackEnd
+dotnet ef migrations add MigrationName --project OceanSuprise/BackEnd
 
 # Docker: Start all services
 docker-compose up -d

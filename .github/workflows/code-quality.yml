@@ -27,16 +27,16 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies - Backend
-        run: dotnet restore SampleApp/BackEnd/BackEnd.csproj
+        run: dotnet restore OceanSuprise/BackEnd/BackEnd.csproj
 
       - name: Restore dependencies - Frontend
-        run: dotnet restore SampleApp/FrontEnd/FrontEnd.csproj
+        run: dotnet restore OceanSuprise/FrontEnd/FrontEnd.csproj
 
       - name: Analyze Backend
-        run: dotnet build SampleApp/BackEnd/BackEnd.csproj --no-restore /p:TreatWarningsAsErrors=true --configuration Release
+        run: dotnet build OceanSuprise/BackEnd/BackEnd.csproj --no-restore /p:TreatWarningsAsErrors=true --configuration Release
 
       - name: Analyze Frontend
-        run: dotnet build SampleApp/FrontEnd/FrontEnd.csproj --no-restore /p:TreatWarningsAsErrors=true --configuration Release
+        run: dotnet build OceanSuprise/FrontEnd/FrontEnd.csproj --no-restore /p:TreatWarningsAsErrors=true --configuration Release
 
   format-check:
     name: Format Validation
@@ -55,5 +55,5 @@ jobs:
         run: dotnet tool install -g dotnet-format
 
       - name: Check formatting
-        run: dotnet format SampleApp/SampleApp.sln --verify-no-changes --verbosity diagnostic
+        run: dotnet format OceanSuprise/OceanSuprise.sln --verify-no-changes --verbosity diagnostic
         continue-on-error: true

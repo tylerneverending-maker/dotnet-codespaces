@@ -21,7 +21,7 @@ Fixes #(issue number)
 ## Build & Format
 <!-- Ensure code quality checks pass -->
 - [ ] Code compiles without warnings: `dotnet build /p:TreatWarningsAsErrors=true`
-- [ ] Code formatted: `dotnet format SampleApp/SampleApp.sln`
+- [ ] Code formatted: `dotnet format OceanSuprise/OceanSuprise.sln`
 - [ ] No new warnings introduced
 
 ## Checklist

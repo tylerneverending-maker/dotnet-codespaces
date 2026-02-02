@@ -8,14 +8,14 @@ This is a .NET 10 sample project demonstrating a full-stack weather application:
 
 ## Architecture & Key Components
 
-### Backend (SampleApp/BackEnd/)
+### Backend (OceanSuprise/BackEnd/)
 - **Entry point**: [BackEnd/Program.cs](BackEnd/Program.cs) configures OpenAPI/Scalar and maps the `/weatherforecast` GET endpoint
 - **Pattern**: Minimal APIs (no controllers) - route handlers defined directly in Program.cs
 - **Data flow**: `app.MapGet()` returns `WeatherForecast` records with auto-computed Fahrenheit conversion
 - **External integration**: Uses Scalar (Microsoft.AspNetCore.OpenApi) for interactive API documentation at `/scalar`
 - **Note**: OpenAPI servers array is cleared for Codespaces port-forwarding compatibility
 
-### Frontend (SampleApp/FrontEnd/)
+### Frontend (OceanSuprise/FrontEnd/)
 - **Entry point**: [FrontEnd/Program.cs](FrontEnd.csproj) configures Blazor Server and HttpClient
 - **HTTP Client**: [WeatherForecastClient.cs](FrontEnd/Data/WeatherForecastClient.cs) fetches data from backend via `WEATHER_URL` environment variable
 - **Data models**: Shared model at [FrontEnd/Data/WeatherForecast.cs](FrontEnd/Data/WeatherForecast.cs)
@@ -24,12 +24,12 @@ This is a .NET 10 sample project demonstrating a full-stack weather application:
 ## Build & Run Commands
 
 Available VS Code tasks:
-- `dotnet build SampleApp/FrontEnd/FrontEnd.csproj` - build frontend
-- `dotnet publish SampleApp/FrontEnd/FrontEnd.csproj` - publish frontend
-- `dotnet watch run --project SampleApp/FrontEnd/FrontEnd.csproj` - frontend with hot reload
-- `dotnet build SampleApp/BackEnd/BackEnd.csproj` - build backend
-- `dotnet publish SampleApp/BackEnd/BackEnd.csproj` - publish backend
-- `dotnet watch run --project SampleApp/BackEnd/BackEnd.csproj` - backend with hot reload
+- `dotnet build OceanSuprise/FrontEnd/FrontEnd.csproj` - build frontend
+- `dotnet publish OceanSuprise/FrontEnd/FrontEnd.csproj` - publish frontend
+- `dotnet watch run --project OceanSuprise/FrontEnd/FrontEnd.csproj` - frontend with hot reload
+- `dotnet build OceanSuprise/BackEnd/BackEnd.csproj` - build backend
+- `dotnet publish OceanSuprise/BackEnd/BackEnd.csproj` - publish backend
+- `dotnet watch run --project OceanSuprise/BackEnd/BackEnd.csproj` - backend with hot reload
 
 Run both via "Run All" in VS Code debug menu (sets up port forwarding 8080/8081).
 
@@ -59,7 +59,7 @@ Automated CI/CD pipelines run on every push and pull request:
 
 The backend uses ASP.NET Core Minimal APIs exclusively - no controllers. Key patterns:
 - **Route definition**: Use `app.MapGet()` directly in Program.cs to define endpoints with dependency injection
-- **Service layer**: Inject services like `IWeatherService` for data access (see [WeatherService.cs](SampleApp/BackEnd/Data/WeatherService.cs))
+- **Service layer**: Inject services like `IWeatherService` for data access (see [WeatherService.cs](OceanSuprise/BackEnd/Data/WeatherService.cs))
 - **Naming requirement**: All endpoints must use `.WithName()` for OpenAPI documentation - critical for Scalar UI integration
 - **Data models**: Use C# records for API response DTOs to enforce immutability (e.g., `WeatherForecast` record with computed `TemperatureF` property)
 - **Scaling pattern**: Extract handlers to separate methods/classes, keep configuration fluent in Program.cs
@@ -67,8 +67,8 @@ The backend uses ASP.NET Core Minimal APIs exclusively - no controllers. Key pat
 ## Database Integration (Entity Framework Core)
 
 Backend uses SQL Server with Entity Framework Core:
-- **DbContext**: [WeatherDbContext.cs](SampleApp/BackEnd/Data/WeatherDbContext.cs) - entity configuration, seeding, and migrations
-- **Service layer**: [WeatherService.cs](SampleApp/BackEnd/Data/WeatherService.cs) - `IWeatherService` interface for data access from API handlers
+- **DbContext**: [WeatherDbContext.cs](OceanSuprise/BackEnd/Data/WeatherDbContext.cs) - entity configuration, seeding, and migrations
+- **Service layer**: [WeatherService.cs](OceanSuprise/BackEnd/Data/WeatherService.cs) - `IWeatherService` interface for data access from API handlers
 - **Connection string**: Configured in `appsettings.json` - defaults to `Server=db` for Docker, or local server for Codespaces
 - **Migrations**: Auto-applied on startup via `dbContext.Database.Migrate()` in Program.cs
 - **Seeding**: Initial data seeded in `OnModelCreating()` - customize by modifying `WeatherDbContext.HasData()`
@@ -123,7 +123,7 @@ The frontend is built with Blazor Server (server-side rendering with WebSocket r
 - Backend API can be tested via Scalar UI at `https://localhost:8081/scalar`
 - Frontend available at `https://localhost:8080`
 - Hot reload on file save speeds iteration (use `dotnet watch run` tasks)
-- Check [appsettings.Development.json](SampleApp/BackEnd/appsettings.Development.json) for dev-specific configurations
+- Check [appsettings.Development.json](OceanSuprise/BackEnd/appsettings.Development.json) for dev-specific configurations
 
 ## Environment & Deployment Considerations
 
@@ -157,8 +157,8 @@ The frontend is built with Blazor Server (server-side rendering with WebSocket r
 ## Docker & Containerization
 
 **Dockerfiles:**
-- [SampleApp/BackEnd/Dockerfile](SampleApp/BackEnd/Dockerfile) - Multi-stage build for backend (SDK → Publish → Runtime)
-- [SampleApp/FrontEnd/Dockerfile](SampleApp/FrontEnd/Dockerfile) - Multi-stage build for frontend with `WEATHER_URL=http://backend:8081`
+- [OceanSuprise/BackEnd/Dockerfile](OceanSuprise/BackEnd/Dockerfile) - Multi-stage build for backend (SDK → Publish → Runtime)
+- [OceanSuprise/FrontEnd/Dockerfile](OceanSuprise/FrontEnd/Dockerfile) - Multi-stage build for frontend with `WEATHER_URL=http://backend:8081`
 
 **Docker Compose:**
 - [docker-compose.yml](docker-compose.yml) - Orchestrates backend, frontend, and SQL Server containers
@@ -180,10 +180,10 @@ docker-compose down
 ```
 
 ## Key Files Reference
-- [SampleApp.sln](SampleApp/SampleApp.sln) - solution file
-- [BackEnd/Program.cs](SampleApp/BackEnd/Program.cs) - API configuration and routes
-- [BackEnd/Data/WeatherService.cs](SampleApp/BackEnd/Data/WeatherService.cs) - data access service
-- [BackEnd/Data/WeatherDbContext.cs](SampleApp/BackEnd/Data/WeatherDbContext.cs) - Entity Framework Core context
-- [FrontEnd/Program.cs](SampleApp/FrontEnd/Program.cs) - Blazor configuration
-- [FrontEnd/Data/WeatherForecastClient.cs](SampleApp/FrontEnd/Data/WeatherForecastClient.cs) - HTTP integration
+- [OceanSuprise.sln](OceanSuprise/OceanSuprise.sln) - solution file
+- [BackEnd/Program.cs](OceanSuprise/BackEnd/Program.cs) - API configuration and routes
+- [BackEnd/Data/WeatherService.cs](OceanSuprise/BackEnd/Data/WeatherService.cs) - data access service
+- [BackEnd/Data/WeatherDbContext.cs](OceanSuprise/BackEnd/Data/WeatherDbContext.cs) - Entity Framework Core context
+- [FrontEnd/Program.cs](OceanSuprise/FrontEnd/Program.cs) - Blazor configuration
+- [FrontEnd/Data/WeatherForecastClient.cs](OceanSuprise/FrontEnd/Data/WeatherForecastClient.cs) - HTTP integration
 - [docker-compose.yml](docker-compose.yml) - Container orchestration
