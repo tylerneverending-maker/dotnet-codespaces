@@ -33,6 +33,28 @@ Available VS Code tasks:
 
 Run both via "Run All" in VS Code debug menu (sets up port forwarding 8080/8081).
 
+## GitHub Actions Workflows
+
+Automated CI/CD pipelines run on every push and pull request:
+
+**[.github/workflows/build.yml](.github/workflows/build.yml)** - Build Pipeline
+- Triggered on: push to main, pull requests to main
+- Jobs: Parallel builds for backend and frontend
+- Output: Publishes release artifacts to `backend-publish/` and `frontend-publish/`
+- Status badge visible in PR checks
+
+**[.github/workflows/code-quality.yml](.github/workflows/code-quality.yml)** - Code Quality
+- Triggered on: push to main, pull requests to main
+- Analysis: Compiles with `/p:TreatWarningsAsErrors=true` (warnings fail the build)
+- Format check: Validates code formatting with `dotnet-format` (informational only)
+- Fails PR if code has warnings
+
+**[.github/workflows/publish-release.yml](.github/workflows/publish-release.yml)** - Release Publishing
+- Triggered on: push to main (every commit), or when tags are pushed (e.g., `git tag v1.0.0`)
+- Creates artifacts for download (backend and frontend publish outputs)
+- On tag push: Creates GitHub Release with published binaries attached
+- Retention: Artifacts kept for 30 days
+
 ## Minimal API Design (Backend)
 
 The backend uses ASP.NET Core Minimal APIs exclusively - no controllers. Key patterns:
