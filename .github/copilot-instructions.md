@@ -50,6 +50,25 @@ The backend uses ASP.NET Core Minimal APIs exclusively - no controllers. Key pat
 - **Development-only endpoints**: OpenAPI/Scalar endpoints only mapped in Development environment (`if (app.Environment.IsDevelopment())`)
 - **Logging configuration**: Both projects use `Information` log level for app code, `Warning` for ASP.NET Core framework (see appsettings.json files)
 
+## Blazor Server Architecture
+
+The frontend is built with Blazor Server (server-side rendering with WebSocket real-time updates):
+- **Routing**: [App.razor](FrontEnd/App.razor) manages routing with `<Router>` component; pages in `/Pages/` directory with `@page` directives
+- **Layout**: [MainLayout.razor](FrontEnd/Shared/MainLayout.razor) wraps all pages; route-specific layouts via `@layout` directive
+- **Navigation**: [NavMenu.razor](FrontEnd/Shared/NavMenu.razor) provides site navigation with active page highlighting
+- **Global imports**: [_Imports.razor](FrontEnd/_Imports.razor) declares namespaces available to all `.razor` components
+- **Component lifecycle**: Use `OnInitializedAsync()` to fetch data on component load (see [FetchData.razor](FrontEnd/Pages/FetchData.razor))
+- **Dependency injection**: Use `@inject` directive in `.razor` files or constructor injection in code-behind components
+- **Null-coalescing in templates**: Check for null state before rendering collections (e.g., `@if (forecasts == null) { <p>Loading...</p> }`)
+
+### Component Patterns
+- **Page components**: Decorated with `@page "/route"` directive; must be in `/Pages/` directory
+- **Shared components**: Reusable components in `/Shared/` or `/Components/` directories
+- **Code blocks**: `@code { }` block at end of `.razor` file for C# logic; private fields rendered via `@fieldName`
+- **Event handling**: `@onclick="MethodName"` for button clicks; `@onchange="MethodName"` for form inputs
+- **Two-way binding**: Use `@bind="variable"` for form inputs; triggers `OnChange` event on input
+- **Conditional rendering**: `@if`, `@else if`, `@else` for conditional markup; `@if` is evaluated server-side before sending to browser
+
 ## Project Conventions
 
 - **Framework version**: .NET 10 (net10.0) - use latest APIs and patterns
