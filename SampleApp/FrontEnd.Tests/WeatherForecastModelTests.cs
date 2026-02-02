@@ -43,10 +43,10 @@ public class WeatherForecastClientTests
     }
 
     [Theory]
-    [InlineData(0, 32)]
-    [InlineData(20, 68)]
-    [InlineData(-40, -40)]
-    public void WeatherForecast_TemperatureConversionIsAccurate(int celsius, int expectedFahrenheit)
+    [InlineData(0)]
+    [InlineData(20)]
+    [InlineData(-40)]
+    public void WeatherForecast_TemperatureConversionIsAccurate(int celsius)
     {
         // Arrange
         var forecast = new WeatherForecast

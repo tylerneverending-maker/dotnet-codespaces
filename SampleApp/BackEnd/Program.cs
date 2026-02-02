@@ -49,7 +49,6 @@ app.MapGet("/weatherforecast", async (IWeatherService service, DateTime? startDa
 {
     return await service.GetForecastAsync(startDate);
 })
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+.WithName("GetWeatherForecast");
 
 app.Run();
